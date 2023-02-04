@@ -40,15 +40,34 @@ clipper = WindTurbine(name='clipper',
                     hub_height=80,
                     powerCtFunction=PowerCtTabular(wind_speed,wind_power,'kW',ct))
 
+# new_site = 
 
-windTurbines = clipper()
+
+# windTurbines = clipper()
 site = Hornsrev1Site()
-noj = NOJ(site,windTurbines)
+noj = NOJ(site,clipper)
 simulationResult = noj(wt16_x,wt16_y)
-simulationResult.aep()
-print(simulationResult.aep().sum())
+aep = simulationResult.aep()
+total_aep = simulationResult.aep().sum()
+total_aep = total_aep.item()
+# print(total_aep)
+print("Total annual energy production = "+str(total_aep) + " GWh")
 
+plt.figure()
+aep.sum(['wt','wd']).plot()
+plt.xlabel("Wind speed [m/s]")
+plt.ylabel("AEP [GWh]")
+plt.title('AEP vs wind speed')
+plt.show()
 
+plt.figure()
+aep = simulationResult.aep()
+c =plt.scatter(wt16_x, wt16_y, c=aep.sum(['wd','ws']))
+plt.colorbar(c, label='AEP [GWh]')
+plt.title('AEP of each turbine')
+plt.xlabel('x [m]')
+plt.ylabel('[m]')
+plt.show()
 
 
 
