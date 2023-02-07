@@ -31,9 +31,10 @@ from py_wake.wind_turbines.generic_wind_turbines import GenericWindTurbine
 
 data = pd.read_csv('wind_data_merged.csv')
 wind_speed = data['WindSpeed (m/s)']
+wind_speed = wind_speed.iloc[1:36]
 wind_power = data['Wind Power (W)']
-ct = [.8]*len(wind_speed)
-# print(ct[0:10])
+wind_power = wind_power.iloc[1:36]
+ct = [.59]*len(wind_speed)
 
 clipper = WindTurbine(name='clipper',
                     diameter=96,
