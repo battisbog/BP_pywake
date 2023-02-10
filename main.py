@@ -34,7 +34,9 @@ wind_speed = data['WindSpeed (m/s)']
 wind_speed = wind_speed.iloc[1:36]
 wind_power = data['Wind Power (W)']
 wind_power = wind_power.iloc[1:36]
-ct = [.59]*len(wind_speed)
+ct = [.65]*len(wind_speed)
+
+# ct = np.linspace()
 
 clipper = WindTurbine(name='clipper',
                     diameter=96,
@@ -42,7 +44,6 @@ clipper = WindTurbine(name='clipper',
                     powerCtFunction=PowerCtTabular(wind_speed,wind_power,'kW',ct))
 
 # new_site = 
-
 
 # windTurbines = clipper()
 site = Hornsrev1Site()
