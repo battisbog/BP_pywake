@@ -46,7 +46,6 @@ clipper = WindTurbine(name='clipper',
                     hub_height=80,
                     powerCtFunction=PowerCtTabular(wind_speed,wind_power,'kW',ct))
 
-# new_site = 
 
 
 # windTurbines = clipper()
@@ -56,6 +55,13 @@ simulationResult = noj(wt16_x,wt16_y)
 aep = simulationResult.aep()
 total_aep = simulationResult.aep().sum()
 total_aep = total_aep.item()
+fm = simulationResult.flow_map()
+# power = power.power_xylk()
+
+plt.figure()
+fm.plot(fm.power_xylk().sum(['wd', 'ws']) * 1e-3, "Power [kW]")
+plt.show()
+print("works")
 
 
 wf_model = BastankhahGaussian(site, clipper)
@@ -67,17 +73,14 @@ sim_res = wf_model(type=0,   # Wind turbine types
 # print(total_aep)
 # print("Total annual energy production = "+str(total_aep) + " GWh")
 
-<<<<<<< Updated upstream
-=======
 # power = simulationResult
 
-plt.figure()
-aep.sum(['wt','wd']).plot()
-plt.xlabel("Wind speed [m/s]")
-plt.ylabel("AEP [GWh]")
-plt.title('AEP vs wind speed')
-plt.show()
->>>>>>> Stashed changes
+# plt.figure()
+# aep.sum(['wt','wd']).plot()
+# plt.xlabel("Wind speed [m/s]")
+# plt.ylabel("AEP [GWh]")
+# plt.title('AEP vs wind speed')
+# plt.show()
 
 
 # plt.figure()
