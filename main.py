@@ -67,6 +67,17 @@ sim_res = wf_model(type=0,   # Wind turbine types
 # print(total_aep)
 # print("Total annual energy production = "+str(total_aep) + " GWh")
 
+<<<<<<< Updated upstream
+=======
+# power = simulationResult
+
+plt.figure()
+aep.sum(['wt','wd']).plot()
+plt.xlabel("Wind speed [m/s]")
+plt.ylabel("AEP [GWh]")
+plt.title('AEP vs wind speed')
+plt.show()
+>>>>>>> Stashed changes
 
 
 # plt.figure()
