@@ -1,4 +1,3 @@
-
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
@@ -21,6 +20,10 @@ from py_wake.wind_turbines.power_ct_functions import PowerCtTabular
 from py_wake.examples.data.hornsrev1 import Hornsrev1Site, V80, wt_x, wt_y, wt16_x, wt16_y
 from py_wake import NOJ
 from py_wake.wind_turbines.generic_wind_turbines import GenericWindTurbine
+from py_wake.wind_turbines import WindTurbine, WindTurbines
+
+
+
 
 ## create a wtg class which is an instance of a pywake wind turinbe item setting turbine hub height, rotor diameter, neame, and power curve function
 
@@ -31,6 +34,12 @@ wind_speed = data['WindSpeed (m/s)']
 wind_speed = wind_speed.iloc[1:36]
 wind_power = data['Wind Power (W)']
 wind_power = wind_power.iloc[1:36]
+df2 = data.groupby('Turbines (Clipper)').apply(lambda x: x['WindSpeed (m/s)'].unique())
+df3 = data.groupby('Turbines (Clipper)').apply(lambda x: x['Wind Power (W)'].unique())
+
+FO601_ws = df2['FO601']
+FO601_pw = df3['FO601']
+
 ct = [.65]*len(wind_speed)
 
 turbines = []
@@ -40,36 +49,15 @@ turbines = []
 clipper = WindTurbine(name='clipper',
                     diameter=96,
                     hub_height=80,
-                    powerCtFunction=PowerCtTabular(wind_speed,wind_power,'kW',ct))
+                    powerCtFunction=PowerCtTabular(FO601_ws,wind_power,'kW',ct))
 
-# new_site = 
+lst = [clipper]*40
+wts = WindTurbines.from_WindTurbine_lst(lst)
+types = wts.types()
 
-# windTurbines = clipper()
-site = Hornsrev1Site()
-noj = NOJ(site,clipper)
-simulationResult = noj(wt16_x,wt16_y)
-aep = simulationResult.aep()
-total_aep = simulationResult.aep().sum()
-total_aep = total_aep.item()
-# print(total_aep)
-print("Total annual energy production = "+str(total_aep) + " GWh")
-
-plt.figure()
-aep.sum(['wt','wd']).plot()
-plt.xlabel("Wind speed [m/s]")
-plt.ylabel("AEP [GWh]")
-plt.title('AEP vs wind speed')
+plt.xlabel('Wind speed [m/s]')
+plt.ylabel('Power [kW]')
+for t in types:
+    plt.plot(FO601_ws, wts.power(FO601_ws, type=t)*1e-3,'.-', label=wts.name(t))
+plt.legend(loc=1)
 plt.show()
-
-plt.figure()
-aep = simulationResult.aep()
-c =plt.scatter(wt16_x, wt16_y, c=aep.sum(['wd','ws']))
-plt.colorbar(c, label='AEP [GWh]')
-plt.title('AEP of each turbine')
-plt.xlabel('x [m]')
-plt.ylabel('[m]')
-plt.show()
-
-
-
-# plt.plot(wind_speed,power)
