@@ -49,7 +49,7 @@ turbines = []
 clipper = WindTurbine(name='clipper',
                     diameter=96,
                     hub_height=80,
-                    powerCtFunction=PowerCtTabular(FO601_ws,wind_power,'kW',ct))
+                    powerCtFunction=PowerCtTabular(FO601_ws,FO601_pw,'kW',ct))
 
 lst = [clipper]*40
 wts = WindTurbines.from_WindTurbine_lst(lst)
