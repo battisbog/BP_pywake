@@ -21,6 +21,9 @@ from py_wake.wind_turbines.power_ct_functions import PowerCtTabular
 from py_wake.site._site import UniformSite
 from py_wake.site.xrsite import XRSite
 from py_wake import BastankhahGaussian
+from py_wake.examples.data.hornsrev1 import Hornsrev1Site
+from py_wake.wind_turbines import WindTurbine
+from py_wake.site import UniformSite
 
 
 
@@ -36,11 +39,11 @@ df3 = data.groupby('Turbines (Clipper)').apply(lambda x: x['Wind Power (W)'].uni
 FO601_ws = df2['FO601']
 FO601_pw = df3['FO601']
 
-ct = [.65]*len(wind_speed)
+ct = [.65]*len(FO601_ws)
 # Define the site (Horns Rev 1 offshore wind farm)
 # site = XRSite(ws)
 windspeeds = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
-site = UniformSite([0, 0], windspeeds)
+# site = UniformSite([0, 0], windspeeds)
 
 
 # Define the wind turbines (Vestas V80)
@@ -49,9 +52,15 @@ clipper = WindTurbine(name='clipper',
                     hub_height=80,
                     powerCtFunction=PowerCtTabular(FO601_ws,FO601_pw,'kW',ct))
 
+# Define the wind farm site (Horns Rev 1 offshore wind farm)
+site = UniformSite([0, 0], FO601_ws.mean())
+
+# Define the wind farm model using the Bastankhah-Gaussian wake model
 wf_model = BastankhahGaussian(site, clipper)
 
-print(wf_model)
+# Compute the power output of the turbine for a given wind direction and speed
+power_output = wf_model([0, 0], [1,2], wd=270)
 
+print(power_output)
 
 
