@@ -24,27 +24,29 @@ from py_wake import BastankhahGaussian
 from py_wake.examples.data.hornsrev1 import Hornsrev1Site
 from py_wake.wind_turbines import WindTurbine
 from py_wake.site import UniformSite
+from py_wake.examples.data.hornsrev1 import Hornsrev1Site, V80, wt_x, wt_y, wt16_x, wt16_y
+
 
 
 
 
 data = pd.read_csv('wind_data_merged.csv')
-wind_speed = data['WindSpeed (m/s)']
-wind_speed = wind_speed.iloc[1:36]
-wind_power = data['Wind Power (W)']
-wind_power = wind_power.iloc[1:36]
 df2 = data.groupby('Turbines (Clipper)').apply(lambda x: x['WindSpeed (m/s)'].unique())
 df3 = data.groupby('Turbines (Clipper)').apply(lambda x: x['Wind Power (W)'].unique())
+df4 = data.groupby('Turbines (Clipper)').apply(lambda x: x['Wind Direction'].unique())
+
 
 FO601_ws = df2['FO601']
 FO601_pw = df3['FO601']
+FO601_wd = [270]*len(FO601_ws)
 
 ct = [.65]*len(FO601_ws)
-# Define the site (Horns Rev 1 offshore wind farm)
-# site = XRSite(ws)
-windspeeds = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
-# site = UniformSite([0, 0], windspeeds)
 
+# Test data:
+xcoords = [0,1,2,3,4,5,6,7,8,9]
+ycoords = [0,1,2,3,4,5,6,7,8,9]
+wind_speed = [6.757998033, 6.695190991, 6.849339685,6.623479287,6.461867368,6.819221548,5.725604083,6.830237155,7.820850293,6.163569947,7.27172156]
+wind_direction = [270]*len(FO601_ws)
 
 # Define the wind turbines (Vestas V80)
 clipper = WindTurbine(name='clipper',
@@ -52,22 +54,30 @@ clipper = WindTurbine(name='clipper',
                     hub_height=80,
                     powerCtFunction=PowerCtTabular(FO601_ws,FO601_pw,'kW',ct))
 
+windTurbines = clipper
+
 # Define the wind farm site (Horns Rev 1 offshore wind farm)
-site = UniformSite([0, 0], FO601_ws.mean())
+# site = UniformSite([0, 0], FO601_ws.mean())
+# site = UniformSite()
+site = Hornsrev1Site()
 
 # Define the wind farm model using the Bastankhah-Gaussian wake model
-wf_model = BastankhahGaussian(site, clipper)
+wf_model = BastankhahGaussian(site, windTurbines)
 
 # p = wf_model()
 # Compute the power output of the turbine for a given wind direction and speed
-simulationResult = wf_model([0,1,2,3,4,5,6,7,8,9], [0,1,2,3,4,5,6,7,8,9],[80]*10, wd=270, ws=FO601_ws)
+# simulationResult = wf_model(xcoords, ycoords,[80]*10, wd=wind_direction, ws=wind_speed)
+simulationResult = wf_model(xcoords, ycoords)
+
+aep = simulationResult.aep()
 
 print(simulationResult)
+print(aep)
 
 plt.figure()
-aep = simulationResult.aep()
 aep.sum(['wt','wd']).plot()
 plt.xlabel("Wind speed [m/s]")
 plt.ylabel("AEP [GWh]")
 plt.title('AEP vs wind speed')
 plt.show()
+
