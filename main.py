@@ -58,9 +58,16 @@ site = UniformSite([0, 0], FO601_ws.mean())
 # Define the wind farm model using the Bastankhah-Gaussian wake model
 wf_model = BastankhahGaussian(site, clipper)
 
+# p = wf_model()
 # Compute the power output of the turbine for a given wind direction and speed
-power_output = wf_model([0, 0], [1,2], wd=270)
+simulationResult = wf_model([0,1,2,3,4,5,6,7,8,9], [0,1,2,3,4,5,6,7,8,9],[80]*10, wd=270, ws=FO601_ws)
 
-print(power_output)
+print(simulationResult)
 
-
+plt.figure()
+aep = simulationResult.aep()
+aep.sum(['wt','wd']).plot()
+plt.xlabel("Wind speed [m/s]")
+plt.ylabel("AEP [GWh]")
+plt.title('AEP vs wind speed')
+plt.show()
