@@ -11,10 +11,6 @@ from scipy.stats import exponweib
 # pywake packages
 from py_wake.wind_farm_models.engineering_models import PropagateDownwind
 from py_wake.deficit_models import TurboNOJDeficit
-from py_wake.rotor_avg_models import RotorCenter
-from py_wake.superposition_models import LinearSum
-from py_wake.turbulence_models import CrespoHernandez
-from py_wake.deflection_models.jimenez import JimenezWakeDeflection
 from py_wake.wind_turbines import WindTurbine
 from py_wake.site._site import UniformWeibullSite
 from py_wake.wind_turbines.power_ct_functions import PowerCtTabular
@@ -38,7 +34,9 @@ df4 = data.groupby('Turbines (Clipper)').apply(lambda x: x['Wind Direction'].uni
 
 FO601_ws = df2['FO601']
 FO601_pw = df3['FO601']
-FO601_wd = [270]*len(FO601_ws)
+# FO601_wd = [270]*len(FO601_ws)
+FO601_wd = df4['FO601']
+
 
 ct = [.65]*len(FO601_ws)
 
@@ -46,7 +44,7 @@ ct = [.65]*len(FO601_ws)
 xcoords = [0,1,2,3,4,5,6,7,8,9]
 ycoords = [0,1,2,3,4,5,6,7,8,9]
 wind_speed = [6.757998033, 6.695190991, 6.849339685,6.623479287,6.461867368,6.819221548,5.725604083,6.830237155,7.820850293,6.163569947,7.27172156]
-wind_direction = [270]*len(FO601_ws)
+wind_direction = [270]*len(wind_speed)
 
 # Define the wind turbines (Vestas V80)
 clipper = WindTurbine(name='clipper',
@@ -67,7 +65,7 @@ wf_model = BastankhahGaussian(site, windTurbines)
 # p = wf_model()
 # Compute the power output of the turbine for a given wind direction and speed
 # simulationResult = wf_model(xcoords, ycoords,[80]*10, wd=wind_direction, ws=wind_speed)
-simulationResult = wf_model(xcoords, ycoords)
+simulationResult = wf_model(xcoords, ycoords, ws=FO601_ws)
 
 aep = simulationResult.aep()
 
