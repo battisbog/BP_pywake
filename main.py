@@ -34,8 +34,8 @@ df4 = data.groupby('Turbines (Clipper)').apply(lambda x: x['Wind Direction'].uni
 
 FO601_ws = df2['FO601']
 FO601_pw = df3['FO601']
-# FO601_wd = [270]*len(FO601_ws)
-FO601_wd = df4['FO601']
+FO601_wd = [270]*len(FO601_ws)
+# FO601_wd = df4['FO601']
 
 
 ct = [.65]*len(FO601_ws)
@@ -65,7 +65,7 @@ wf_model = BastankhahGaussian(site, windTurbines)
 # p = wf_model()
 # Compute the power output of the turbine for a given wind direction and speed
 # simulationResult = wf_model(xcoords, ycoords,[80]*10, wd=wind_direction, ws=wind_speed)
-simulationResult = wf_model(xcoords, ycoords, ws=FO601_ws)
+simulationResult = wf_model(xcoords, ycoords,wd=FO601_wd,  ws=FO601_ws)
 
 aep = simulationResult.aep()
 
