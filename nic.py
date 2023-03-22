@@ -62,7 +62,7 @@ plt.ylabel("AEP [GWh]")
 plt.title('AEP vs wind speed')
 plt.show()
 
-st.pyplt(fig1=fig1)
+st.pyplot(fig1=fig1)
 
 fig2 = plt.figure()
 aep = simulationResult.aep()
