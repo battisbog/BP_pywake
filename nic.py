@@ -55,14 +55,16 @@ total_aep = total_aep.item()
 # print(total_aep)
 print("Total annual energy production = "+str(total_aep) + " GWh")
 
-plt.figure()
+fig1=plt.figure()
 aep.sum(['wt','wd']).plot()
 plt.xlabel("Wind speed [m/s]")
 plt.ylabel("AEP [GWh]")
 plt.title('AEP vs wind speed')
 plt.show()
 
-fig = plt.figure()
+st.pyplt(fig1=fig1)
+
+fig2 = plt.figure()
 aep = simulationResult.aep()
 c =plt.scatter(wt16_x, wt16_y, c=aep.sum(['wd','ws']))
 plt.colorbar(c, label='AEP [GWh]')
@@ -71,8 +73,10 @@ plt.xlabel('x [m]')
 plt.ylabel('[m]')
 plt.show()
 
-st.pyplot(fig=fig)
+st.pyplot(fig2=fig2)
 
 
 # plt.plot(wind_speed,power)
+
+# plt.plot(wind_rose)
 
