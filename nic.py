@@ -75,5 +75,4 @@ st.pyplot(fig=fig)
 
 
 # plt.plot(wind_speed,power)
-  git config --global user.email "nvs5574@psu.edu"
-  git config --global user.name "nvs5574"
+
