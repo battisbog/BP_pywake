@@ -11,71 +11,89 @@ from scipy.stats import exponweib
 # pywake packages
 from py_wake.wind_farm_models.engineering_models import PropagateDownwind
 from py_wake.deficit_models import TurboNOJDeficit
+from py_wake.rotor_avg_models import RotorCenter
+from py_wake.superposition_models import LinearSum
+from py_wake.turbulence_models import CrespoHernandez
+from py_wake.deflection_models.jimenez import JimenezWakeDeflection
 from py_wake.wind_turbines import WindTurbine
 from py_wake.site._site import UniformWeibullSite
 from py_wake.wind_turbines.power_ct_functions import PowerCtTabular
-from py_wake.site._site import UniformSite
-from py_wake.site.xrsite import XRSite
-from py_wake import BastankhahGaussian
-from py_wake.examples.data.hornsrev1 import Hornsrev1Site
-from py_wake.wind_turbines import WindTurbine
-from py_wake.site import UniformSite
 from py_wake.examples.data.hornsrev1 import Hornsrev1Site, V80, wt_x, wt_y, wt16_x, wt16_y
+from py_wake import NOJ
+from py_wake.wind_turbines.generic_wind_turbines import GenericWindTurbine
 
+## create a wtg class which is an instance of a pywake wind turinbe item setting turbine hub height, rotor diameter, neame, and power curve function
 
+# clipper = GenericWindTurbine("clipper", 96,80, power_norm=10000, turbulence_intensity=.1)
 
+data = pd.read_csv('titan_data.csv')
+wind_speed = data['WS']
+# wind_speed = wind_speed.iloc[1:36]
+wind_power = data['Power']
+# wind_power = wind_power.iloc[1:36]
+ct = [.65]*len(wind_speed)
 
+x_coord = [-99.163365,
+-99.159478,
+-99.148998,
+-99.144288,
+-99.139698,
+-99.133815,
+-99.128011,
+-99.122527,
+-99.11286,
+-99.107977]
 
-data = pd.read_csv('wind_data_merged.csv')
-df2 = data.groupby('Turbines (Clipper)').apply(lambda x: x['WindSpeed (m/s)'].unique())
-df3 = data.groupby('Turbines (Clipper)').apply(lambda x: x['Wind Power (W)'].unique())
-df4 = data.groupby('Turbines (Clipper)').apply(lambda x: x['Wind Direction'].unique())
+y_coord = [44.469055,
+44.468935,
+44.475188,
+44.47658,
+44.477594,
+44.477952,
+44.480515,
+44.480035,
+44.480819,
+44.479672]
 
+met_x = 44.47376462
+met_y = -99.15023877
 
-FO601_ws = df2['FO601']
-FO601_pw = df3['FO601']
-FO601_wd = [270]*len(FO601_ws)
-# FO601_wd = df4['FO601']
+turbines = []
 
+# ct = np.linspace()
 
-ct = [.65]*len(FO601_ws)
-
-# Test data:
-xcoords = [0,1,2,3,4,5,6,7,8,9]
-ycoords = [0,1,2,3,4,5,6,7,8,9]
-wind_speed = [6.757998033, 6.695190991, 6.849339685,6.623479287,6.461867368,6.819221548,5.725604083,6.830237155,7.820850293,6.163569947,7.27172156]
-wind_direction = [270]*len(wind_speed)
-
-# Define the wind turbines (Vestas V80)
 clipper = WindTurbine(name='clipper',
                     diameter=96,
                     hub_height=80,
-                    powerCtFunction=PowerCtTabular(FO601_ws,FO601_pw,'kW',ct))
+                    powerCtFunction=PowerCtTabular(wind_speed,wind_power,'kW',ct))
 
-windTurbines = clipper
+# new_site = 
 
-# Define the wind farm site (Horns Rev 1 offshore wind farm)
-# site = UniformSite([0, 0], FO601_ws.mean())
-# site = UniformSite()
+# windTurbines = clipper()
 site = Hornsrev1Site()
-
-# Define the wind farm model using the Bastankhah-Gaussian wake model
-wf_model = BastankhahGaussian(site, windTurbines)
-
-# p = wf_model()
-# Compute the power output of the turbine for a given wind direction and speed
-# simulationResult = wf_model(xcoords, ycoords,[80]*10, wd=wind_direction, ws=wind_speed)
-simulationResult = wf_model(xcoords, ycoords,wd=FO601_wd,  ws=FO601_ws)
-
+noj = NOJ(site,clipper)
+simulationResult = noj(x_coord,y_coord)
 aep = simulationResult.aep()
+total_aep = simulationResult.aep().sum()
+total_aep = total_aep.item()
+# print(total_aep)
+print("Total annual energy production = "+str(total_aep) + " GWh")
 
-print(simulationResult)
-print(aep)
+site_wind_speeds = site.local_wind(x=x_coord, y=y_coord).ws
+ws = xr.DataArray(site_wind_speeds, dims=['ws'], name='ws')
+wd = site.local_wind(x=x_coord, y=y_coord).wd
 
-plt.figure()
-aep.sum(['wt','wd']).plot()
-plt.xlabel("Wind speed [m/s]")
-plt.ylabel("AEP [GWh]")
-plt.title('AEP vs wind speed')
+simulationResult_given_ws = noj(x_coord, y_coord, ws=ws, wd=wd)
+aep_given_ws = simulationResult_given_ws.aep()
+
+aep_given_ws_sum = aep_given_ws.sum(dim='wd').values.T
+
+fig, ax = plt.subplots()
+for i in range(len(x_coord)):
+    ax.plot(site_wind_speeds, aep_given_ws_sum[i], label=f'Turbine {i+1}')
+
+ax.set_xlabel('Wind speed [m/s]')
+ax.set_ylabel('AEP [GWh]')
+ax.set_title('AEP of each turbine vs wind speed')
+ax.legend()
 plt.show()
-
