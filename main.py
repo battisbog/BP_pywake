@@ -34,6 +34,31 @@ wind_power = data['Wind Power (W)']
 wind_power = wind_power.iloc[1:36]
 ct = [.65]*len(wind_speed)
 
+x_coord = [-99.163365,
+-99.159478,
+-99.148998,
+-99.144288,
+-99.139698,
+-99.133815,
+-99.128011,
+-99.122527,
+-99.11286,
+-99.107977]
+
+y_coord = [44.469055,
+44.468935,
+44.475188,
+44.47658,
+44.477594,
+44.477952,
+44.480515,
+44.480035,
+44.480819,
+44.479672]
+
+met_x = 44.47376462
+met_y = -99.15023877
+
 turbines = []
 
 # ct = np.linspace()
@@ -48,7 +73,7 @@ clipper = WindTurbine(name='clipper',
 # windTurbines = clipper()
 site = Hornsrev1Site()
 noj = NOJ(site,clipper)
-simulationResult = noj(wt16_x,wt16_y)
+simulationResult = noj(x_coord,y_coord)
 aep = simulationResult.aep()
 total_aep = simulationResult.aep().sum()
 total_aep = total_aep.item()
@@ -64,8 +89,9 @@ plt.show()
 
 fig = plt.figure()
 aep = simulationResult.aep()
-c =plt.scatter(wt16_x, wt16_y, c=aep.sum(['wd','ws']))
-plt.colorbar(c, label='AEP [GWh]')
+c =plt.scatter(x_coord, y_coord)
+# new_point = plt.scatter(44.47376462, -99.15023877, marker='o', label="met tower") # Plot the new point in magenta
+plt.colorbar( label='AEP [GWh]')
 plt.title('AEP of each turbine')
 plt.xlabel('x [m]')
 plt.ylabel('[m]')
