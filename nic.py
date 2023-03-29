@@ -77,9 +77,8 @@ st.pyplot(fig=fig)
 # plt.plot(wind_speed,power)
 
 # plt.plot(wind_rose)
-
-import WindRose.csv as px
-df = px.data.wind()
+import plotly.express as px
+df = px.WindRose.csv()
 fig = px.bar_polar(df, r="frequency", theta="direction",
                    color="strength", template="plotly_dark",
                    color_discrete_sequence= px.colors.sequential.Plasma_r)
