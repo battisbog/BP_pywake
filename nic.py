@@ -82,29 +82,54 @@ import plotly.graph_objects as go
 fig = go.Figure()
 
 fig.add_trace(go.Barpolar(
-    r=[77.5, 72.5, 70.0, 45.0, 22.5, 42.5, 40.0, 62.5],
-    name='11-14 m/s',
+    r=[0, 0, 0, 0, 0, 0, 0.003805175, 0.013318113],
+    name='20-22.5 m/s',
     marker_color='rgb(106,81,163)'
 ))
 fig.add_trace(go.Barpolar(
-    r=[57.5, 50.0, 45.0, 35.0, 20.0, 22.5, 37.5, 55.0],
-    name='8-11 m/s',
+    r=[0, 0, 0, 0.057077626, 0, 0.005707763, 0.064687976, 0.1065449015],
+    name='17.5-20 m/s',
+    marker_color='rgb(242,240,247)'
+))
+fig.add_trace(go.Barpolar(
+    r=[0.003805175, 0, 0, 0.188356164, 0.020928463, 0.024733638, 0.195966514, 0.340563166],
+    name='15-17.5 m/s',
     marker_color='rgb(158,154,200)'
 ))
 fig.add_trace(go.Barpolar(
-    r=[40.0, 30.0, 30.0, 35.0, 7.5, 7.5, 32.5, 40.0],
-    name='5-8 m/s',
+    r=[0.019025875, 0.00761035, 0.043759513, 1.065449011, 0.060882801, 0.070395738, 0.496575342, 0.755327245],
+    name='12.5-15 m/s',
     marker_color='rgb(203,201,226)'
 ))
 fig.add_trace(go.Barpolar(
-    r=[20.0, 7.5, 15.0, 22.5, 2.5, 2.5, 12.5, 22.5],
-    name='< 5 m/s',
+    r=[0.053272451, 0.083713851, 1.168188737, 2.747336377, 0.226407915, 0.203576865, 1.267123288, 1.25],
+    name='10-12.5 m/s',
+    marker_color='rgb(242,240,247)'
+))
+fig.add_trace(go.Barpolar(
+    r=[0.363394216, 0.351978691, 3.175418569, 4.24847793, 0.637366819, 0.72108067, 1.835996956, 1.48782344],
+    name='7.5-10 m/s',
+    marker_color='rgb(242,240,247)'
+))
+fig.add_trace(go.Barpolar(
+    r=[1.023592085, 1.175799087, 2.517123288, 3.706240487, 1.445966514, 1.084474886, 2.566590563, 1.659056317],
+    name='5-7.5 m/s',
+    marker_color='rgb(242,240,247)'
+))
+fig.add_trace(go.Barpolar(
+    r=[0.742009132, 0.903729072, 1.504946728, 2.077625571, 1.263318113, 1.057838661, 1.411719939, 0.939878234],
+    name='2.5-5 m/s',
+    marker_color='rgb(242,240,247)'
+))
+fig.add_trace(go.Barpolar(
+    r=[0.081811263, 0.117960426, 0.25304414,	0.374809741, 0.319634703, 0.21499239, 0.209284627, 0.106544901],
+    name='< 2.5 m/s',
     marker_color='rgb(242,240,247)'
 ))
 
 fig.update_traces(text=['North', 'N-E', 'East', 'S-E', 'South', 'S-W', 'West', 'N-W'])
 fig.update_layout(
-    title='Wind Speed Distribution in Laurel, NE',
+    title='Wind Speed Distribution at Titan BP Asset',
     font_size=16,
     legend_font_size=16,
     polar_radialaxis_ticksuffix='%',
