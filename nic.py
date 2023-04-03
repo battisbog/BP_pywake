@@ -84,47 +84,47 @@ fig = go.Figure()
 fig.add_trace(go.Barpolar(
     r=[0, 0, 0, 0, 0, 0, 0.003805175, 0.013318113],
     name='20-22.5 m/s',
-    marker_color='#0BE60B'
+    marker_color='#131413'
 ))
 fig.add_trace(go.Barpolar(
     r=[0, 0, 0, 0.057077626, 0, 0.005707763, 0.064687976, 0.1065449015],
     name='17.5-20 m/s',
-    marker_color='#2EA82E'
+    marker_color='#323D32'
 ))
 fig.add_trace(go.Barpolar(
     r=[0.003805175, 0, 0, 0.188356164, 0.020928463, 0.024733638, 0.195966514, 0.340563166],
     name='15-17.5 m/s',
-    marker_color='#378A37'
+    marker_color='#385238'
 ))
 fig.add_trace(go.Barpolar(
     r=[0.019025875, 0.00761035, 0.043759513, 1.065449011, 0.060882801, 0.070395738, 0.496575342, 0.755327245],
     name='12.5-15 m/s',
-    marker_color='#407540'
+    marker_color='#3F6F3F'
 ))
 fig.add_trace(go.Barpolar(
     r=[0.053272451, 0.083713851, 1.168188737, 2.747336377, 0.226407915, 0.203576865, 1.267123288, 1.25],
     name='10-12.5 m/s',
-    marker_color='#456745'
+    marker_color='#3B833B'
 ))
 fig.add_trace(go.Barpolar(
     r=[0.363394216, 0.351978691, 3.175418569, 4.24847793, 0.637366819, 0.72108067, 1.835996956, 1.48782344],
     name='7.5-10 m/s',
-    marker_color='#415441'
+    marker_color='#33A033'
 ))
 fig.add_trace(go.Barpolar(
     r=[1.023592085, 1.175799087, 2.517123288, 3.706240487, 1.445966514, 1.084474886, 2.566590563, 1.659056317],
     name='5-7.5 m/s',
-    marker_color='#303730'
+    marker_color='#23B723'
 ))
 fig.add_trace(go.Barpolar(
     r=[0.742009132, 0.903729072, 1.504946728, 2.077625571, 1.263318113, 1.057838661, 1.411719939, 0.939878234],
     name='2.5-5 m/s',
-    marker_color='#373937'
+    marker_color='#14D414'
 ))
 fig.add_trace(go.Barpolar(
     r=[0.081811263, 0.117960426, 0.25304414,	0.374809741, 0.319634703, 0.21499239, 0.209284627, 0.106544901],
     name='< 2.5 m/s',
-    marker_color='#060606'
+    marker_color='#03F903'
 ))
 
 fig.update_traces(text=['North', 'N-E', 'East', 'S-E', 'South', 'S-W', 'West', 'N-W'])
