@@ -134,7 +134,7 @@ fig.update_layout(
     legend_font_size=16,
     polar_radialaxis_ticksuffix='%',
     polar_angularaxis_rotation=90,
-    names=['N','NE','E','SE','S','SW','W','NW']
+    images=['N','NE','E','SE','S','SW','W','NW']
 
 )
 fig.show()
