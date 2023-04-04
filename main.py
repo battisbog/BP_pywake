@@ -79,21 +79,36 @@ total_aep = total_aep.item()
 # print(total_aep)
 print("Total annual energy production = "+str(total_aep) + " GWh")
 
-site_wind_speeds = site.local_wind(x=x_coord, y=y_coord).ws
-ws = xr.DataArray(site_wind_speeds, dims=['ws'], name='ws')
+# Create a histogram of the wind speed data
+hist, bin_edges = np.histogram(wind_speed, bins=20, density=True)
+bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2
+
+ws = xr.DataArray(bin_centers, dims=['ws'], name='ws')
 wd = site.local_wind(x=x_coord, y=y_coord).wd
 
 simulationResult_given_ws = noj(x_coord, y_coord, ws=ws, wd=wd)
 aep_given_ws = simulationResult_given_ws.aep()
 
-aep_given_ws_sum = aep_given_ws.sum(dim='wd').values.T
+turbine_aep_given_ws = aep_given_ws.sum(dim=['ws', 'wd']).values
 
-fig, ax = plt.subplots()
-for i in range(len(x_coord)):
-    ax.plot(site_wind_speeds, aep_given_ws_sum[i], label=f'Turbine {i+1}')
+for i, turbine_aep in enumerate(turbine_aep_given_ws):
+    print(f"AEP for turbine {i+1} using given wind speed data = {turbine_aep:.2f} GWh")
 
-ax.set_xlabel('Wind speed [m/s]')
-ax.set_ylabel('AEP [GWh]')
-ax.set_title('AEP of each turbine vs wind speed')
-ax.legend()
+
+
+plt.figure()
+aep.sum(['wt','wd']).plot()
+plt.xlabel("Wind speed [m/s]")
+plt.ylabel("AEP [GWh]")
+plt.title('Total AEP vs wind speed')
+plt.show()
+
+plt.figure()
+aep = simulationResult.aep()
+c =plt.scatter(x_coord, y_coord)
+# new_point = plt.scatter(44.47376462, -99.15023877, marker='o', label="met tower") # Plot the new point in magenta
+plt.colorbar( label='AEP [GWh]')
+plt.title('AEP of each turbine')
+plt.xlabel('longitute')
+plt.ylabel('latitude')
 plt.show()
