@@ -55,6 +55,35 @@ total_aep = total_aep.item()
 # print(total_aep)
 print("Total annual energy production = "+str(total_aep) + " GWh")
 
+#plot turbine layout
+
+x_coord = [-99.163365,
+-99.159478,
+-99.148998,
+-99.144288,
+-99.139698,
+-99.133815,
+-99.128011,
+-99.122527,
+-99.11286,
+-99.107977]
+
+y_coord = [44.469055,
+44.468935,
+44.475188,
+44.47658,
+44.477594,
+44.477952,
+44.480515,
+44.480035,
+44.480819,
+44.479672]
+
+met_x = 44.47376462
+met_y = -99.15023877
+
+turbines = []
+
 fig=plt.figure()
 aep.sum(['wt','wd']).plot()
 plt.xlabel("Wind speed [m/s]")
@@ -72,7 +101,6 @@ plt.ylabel('[m]')
 plt.show()
 
 st.pyplot(fig=fig)
-
 
 # plt.plot(wind_speed,power)
 
