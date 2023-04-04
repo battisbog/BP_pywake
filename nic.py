@@ -34,29 +34,6 @@ wind_power = data['Wind Power (W)']
 wind_power = wind_power.iloc[1:36]
 ct = [.65]*len(wind_speed)
 
-turbines = []
-
-# ct = np.linspace()
-
-clipper = WindTurbine(name='clipper',
-                    diameter=96,
-                    hub_height=80,
-                    powerCtFunction=PowerCtTabular(wind_speed,wind_power,'kW',ct))
-
-# new_site = 
-
-# windTurbines = clipper()
-site = Hornsrev1Site()
-noj = NOJ(site,clipper)
-simulationResult = noj(wt16_x,wt16_y)
-aep = simulationResult.aep()
-total_aep = simulationResult.aep().sum()
-total_aep = total_aep.item()
-# print(total_aep)
-print("Total annual energy production = "+str(total_aep) + " GWh")
-
-#plot turbine layout
-
 x_coord = [-99.163365,
 -99.159478,
 -99.148998,
@@ -84,7 +61,26 @@ met_y = -99.15023877
 
 turbines = []
 
-fig=plt.figure()
+# ct = np.linspace()
+
+clipper = WindTurbine(name='clipper',
+                    diameter=96,
+                    hub_height=80,
+                    powerCtFunction=PowerCtTabular(wind_speed,wind_power,'kW',ct))
+
+# new_site = 
+
+# windTurbines = clipper()
+site = Hornsrev1Site()
+noj = NOJ(site,clipper)
+simulationResult = noj(x_coord,y_coord)
+aep = simulationResult.aep()
+total_aep = simulationResult.aep().sum()
+total_aep = total_aep.item()
+# print(total_aep)
+print("Total annual energy production = "+str(total_aep) + " GWh")
+
+plt.figure()
 aep.sum(['wt','wd']).plot()
 plt.xlabel("Wind speed [m/s]")
 plt.ylabel("AEP [GWh]")
@@ -93,8 +89,9 @@ plt.show()
 
 fig = plt.figure()
 aep = simulationResult.aep()
-c =plt.scatter(wt16_x, wt16_y, c=aep.sum(['wd','ws']))
-plt.colorbar(c, label='AEP [GWh]')
+c =plt.scatter(x_coord, y_coord)
+# new_point = plt.scatter(44.47376462, -99.15023877, marker='o', label="met tower") # Plot the new point in magenta
+plt.colorbar( label='AEP [GWh]')
 plt.title('AEP of each turbine')
 plt.xlabel('x [m]')
 plt.ylabel('[m]')
