@@ -212,7 +212,7 @@ aep = simulationResult.aep()
 c =plt.scatter(x_coord, y_coord)
 # new_point = plt.scatter(44.47376462, -99.15023877, marker='o', label="met tower") # Plot the new point in magenta
 plt.colorbar( label='AEP [GWh]')
-plt.title('AEP of each turbine')
+plt.title('AEP vs wind speed Flat Ridge 1 Wind Farm')
 plt.xlabel('Longitude [degrees]')
 plt.ylabel('Latitude [degrees]')
 plt.show()
